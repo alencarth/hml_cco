@@ -8,7 +8,7 @@ services:
       - "5672:5672"
       - "15672:15672"
     volumes:
-      - rabbit_data:/var/lib/rabbitmq
+      - rabbit_data_cco:/var/lib/rabbitmq
       - ./init-scripts/rabbitmq:/init-scripts
     environment:
       RABBITMQ_DEFAULT_USER: metrobh
@@ -16,7 +16,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.8
+        ipv4_address: 172.28.0.7
     # command: ["/bin/bash", "-c", "/init-scripts/setup.sh"]
     
   rabbitmqcore:
@@ -34,7 +34,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.19
+        ipv4_address: 172.28.0.5
     # command: ["/bin/bash", "-c", "/init-scripts/setup.sh"]
 
   mysqlcco:
@@ -51,7 +51,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.15
+        ipv4_address: 172.28.0.9
         
   core:
     image: thalesuniq/brt-core-hml:latest
@@ -71,7 +71,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.24
+        ipv4_address: 172.28.0.16
 
   interfaces-cco:
     image: thalesuniq/brt-interfaces-hml:latest
@@ -92,7 +92,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.16
+        ipv4_address: 172.28.0.15
 
 
   interfaces-sso:
@@ -110,35 +110,35 @@ services:
       MONGO_PORT: 27018
       BRT_CCO: "true"
     ports:
-      - "8102:8102"
+      - "8101:8101"
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.23
+        ipv4_address: 172.28.0.14
 
   frontend-cco:
     image: thalesuniq/brt-operation-hml:latest
     container_name: frontend-cco
     environment:
-          API_URL: http://hub_interfaces-cco:8102
+          API_URL: http://interfaces-cco:8102
     ports:
       - "4200:8200"
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.17
+        ipv4_address: 172.28.0.13
 
   frontend-sso:
     image: thalesuniq/brt-operation-hml:latest
     container_name: frontend-sso
     environment:
-          API_URL: http://hub_interfaces-sso:8101
+          API_URL: http://interfaces-sso:8101
     ports:
       - "4201:8201"
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.22
+        ipv4_address: 172.28.0.12
 
   redis:
     container_name: redis
@@ -152,14 +152,16 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 192.168.1.10
+        ipv4_address: 172.28.0.10
 
 volumes:
   mysqlcco_data:
     external: true
-  rabbit_data:
+  rabbit_data_cco:
     external: true
   redis_data:
+    external: true
+  rabbit_data_core:
     external: true
 
 networks:
@@ -167,4 +169,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.1.0/24
+        - subnet: 172.28.0.0/16
