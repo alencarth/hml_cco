@@ -82,7 +82,7 @@ services:
       SPRING_PROFILES_ACTIVE: homol
       SPRING_DATA_MONGODB_URI: mongodb://brt:%21%40Cittamobi123@host.docker.internal:27018/brt
     ports:
-      - "8101:8101"
+      - "8103:8103"
     restart: always
     networks:
       metro-network:
@@ -104,7 +104,7 @@ services:
     image: uniqhub.azurecr.io/metro-operation-hml-cco:latest
     container_name: frontend-sso
     environment:
-          API_URL: http://interfaces-sso:8101
+          API_URL: http://interfaces-sso:8103
     ports:
       - "4201:8200"
     restart: always
