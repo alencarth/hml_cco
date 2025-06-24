@@ -55,7 +55,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
     ports:
-      - "8103:8103"
+      - "8104:8104"
     restart: on-failure
     networks:
       metro-network:
