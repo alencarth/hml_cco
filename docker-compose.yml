@@ -145,15 +145,10 @@ services:
 
 volumes:
   mysqlcco_data:
-    external: true
   rabbit_data_cco:
-    external: true
   redis_data:
-    external: true
   rabbit_data_core:
-    external: true
   portainer_data:
-    external: true
   mongodbcco_config_data:
   mongodbcco_data:
 
