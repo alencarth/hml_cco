@@ -1,15 +1,27 @@
 version: '3.9'
 
 services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    ports:
+      - "9001:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+    networks:
+      metro-network:
+        ipv4_address: 172.28.0.4
+
   rabbitmq:
     container_name: rabbitmq-cco
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5673:5672"
+      - "15673:15672"
     volumes:
       - rabbit_data_cco:/var/lib/rabbitmq
-      - ./init-scripts/rabbitmq:/init-scripts
     environment:
       RABBITMQ_DEFAULT_USER: metrobh
       RABBITMQ_DEFAULT_PASS: '!@UniqHub123'
@@ -17,17 +29,15 @@ services:
     networks:
       metro-network:
         ipv4_address: 172.28.0.7
-    # command: ["/bin/bash", "-c", "/init-scripts/setup.sh"]
     
   rabbitmqcore:
     container_name: rabbitmqCORE
     image: rabbitmq:3-management
     ports:
-      - "5673:5672"
-      - "15673:15672"
+      - "5674:5672"
+      - "15674:15672"
     volumes:
       - rabbit_data_core:/var/lib/rabbitmq
-      - ./init-scripts/rabbitmq:/init-scripts
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: '!@Cittamobi123'
@@ -35,7 +45,6 @@ services:
     networks:
       metro-network:
         ipv4_address: 172.28.0.5
-    # command: ["/bin/bash", "-c", "/init-scripts/setup.sh"]
 
   mysqlcco:
     container_name: mysqlcco
@@ -47,46 +56,30 @@ services:
     - "3309:3306"
     volumes:
       - mysqlcco_data:/var/lib/mysql
-      - ./init-scripts/sqlcco:/docker-entrypoint-initdb.d
+      - ./init-scripts/sql:/docker-entrypoint-initdb.d
     restart: always
     networks:
       metro-network:
         ipv4_address: 172.28.0.9
         
   core:
-    image: thalesuniq/brt-core-hml:latest
+    image: uniqhub.azurecr.io/metro-core-dev:latest
     container_name: core-cco
     environment:
       SPRING_PROFILES_ACTIVE: dev
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqlcco:3306/metroum?useTimezone=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_USERNAME: metrobh
-      SPRING_RABBITMQ_PASSWORD: '!@UniqHub123'
-      MONGO_HOST: 10.40.65.6
-      MONGO_PORT: 27018
     ports:
       - "8103:8103"
-    restart: always
+    restart: on-failure
     networks:
       metro-network:
         ipv4_address: 172.28.0.16
 
   interfaces-cco:
-    image: thalesuniq/brt-interfaces-hml:latest
+    image: uniqhub.azurecr.io/metro-interfaces-hml-cco:latest
     container_name: interfaces-cco
     environment:
-      SPRING_PROFILES_ACTIVE: hml
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqlcco:3306/metroum?useTimezone=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_USERNAME: metrobh
-      SPRING_RABBITMQ_PASSWORD: '!@UniqHub123'
-      MONGO_HOST: 10.40.65.6
-      MONGO_PORT: 27018
-      BRT_CCO: "true"
+      SPRING_PROFILES_ACTIVE: homol-cco
+      SPRING_DATA_MONGODB_URI: mongodb://brt:%21%40Cittamobi123@host.docker.internal:27018/brt
     ports:
       - "8102:8102"
     restart: always
@@ -96,19 +89,11 @@ services:
 
 
   interfaces-sso:
-    image: thalesuniq/brt-interfaces-hml:latest
+    image: uniqhub.azurecr.io/metro-interfaces-hml-cco:latest
     container_name: interfaces-sso
     environment:
-      SPRING_PROFILES_ACTIVE: hml
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqlcco:3306/metrodois?useTimezone=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_USERNAME: metrobh
-      SPRING_RABBITMQ_PASSWORD: '!@UniqHub123'
-      MONGO_HOST: 10.40.65.6
-      MONGO_PORT: 27018
-      BRT_CCO: "true"
+      SPRING_PROFILES_ACTIVE: homol
+      SPRING_DATA_MONGODB_URI: mongodb://brt:%21%40Cittamobi123@host.docker.internal:27018/brt
     ports:
       - "8101:8101"
     restart: always
@@ -117,7 +102,7 @@ services:
         ipv4_address: 172.28.0.14
 
   frontend-cco:
-    image: thalesuniq/brt-operation-hml:latest
+    image: uniqhub.azurecr.io/metro-operation-hml-cco:latest
     container_name: frontend-cco
     environment:
           API_URL: http://interfaces-cco:8102
@@ -129,12 +114,12 @@ services:
         ipv4_address: 172.28.0.13
 
   frontend-sso:
-    image: thalesuniq/brt-operation-hml:latest
+    image: uniqhub.azurecr.io/metro-operation-hml-cco:latest
     container_name: frontend-sso
     environment:
           API_URL: http://interfaces-sso:8101
     ports:
-      - "4201:8201"
+      - "4201:8200"
     restart: always
     networks:
       metro-network:
@@ -144,7 +129,7 @@ services:
     container_name: redis-cco
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "6380:6379"
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - redis_data:/data
@@ -153,6 +138,23 @@ services:
     networks:
       metro-network:
         ipv4_address: 172.28.0.10
+        
+  mongodbcco:
+    container_name: mongodbcco
+    image: mongo:latest
+    ports:
+      - "27019:27017"
+    volumes:
+      - mongodbcco_config_data:/data/configdb
+      - mongodbcco_data:/data/db
+      - ./init-scripts/mongo:/docker-entrypoint-initdb.d
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: metrobh
+      MONGO_INITDB_ROOT_PASSWORD: 'UniqHub123'
+    restart: always
+    networks:
+      metro-network:
+        ipv4_address: 172.28.0.3
 
 volumes:
   mysqlcco_data:
@@ -163,6 +165,10 @@ volumes:
     external: true
   rabbit_data_core:
     external: true
+  portainer_data:
+    external: true
+  mongodbcco_config_data:
+  mongodbcco_data:
 
 networks:
   metro-network:
