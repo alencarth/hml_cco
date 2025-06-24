@@ -12,7 +12,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.4
+        ipv4_address: 172.29.0.4
 
   rabbitmq:
     container_name: rabbitmq-cco
@@ -28,7 +28,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.7
+        ipv4_address: 172.29.0.7
     
   rabbitmqcore:
     container_name: rabbitmqCORE
@@ -44,7 +44,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.5
+        ipv4_address: 172.29.0.5
 
   mysqlcco:
     container_name: mysqlcco
@@ -60,7 +60,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.9
+        ipv4_address: 172.29.0.9
         
   core:
     image: uniqhub.azurecr.io/metro-core-dev:latest
@@ -72,7 +72,7 @@ services:
     restart: on-failure
     networks:
       metro-network:
-        ipv4_address: 172.28.0.16
+        ipv4_address: 172.29.0.16
 
   interfaces-cco:
     image: uniqhub.azurecr.io/metro-interfaces-hml-cco:latest
@@ -85,7 +85,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.15
+        ipv4_address: 172.29.0.15
 
 
   interfaces-sso:
@@ -99,7 +99,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.14
+        ipv4_address: 172.29.0.14
 
   frontend-cco:
     image: uniqhub.azurecr.io/metro-operation-hml-cco:latest
@@ -111,7 +111,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.13
+        ipv4_address: 172.29.0.13
 
   frontend-sso:
     image: uniqhub.azurecr.io/metro-operation-hml-cco:latest
@@ -123,7 +123,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.12
+        ipv4_address: 172.29.0.12
 
   redis:
     container_name: redis-cco
@@ -137,7 +137,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.10
+        ipv4_address: 172.29.0.10
         
   mongodbcco:
     container_name: mongodbcco
@@ -154,7 +154,7 @@ services:
     restart: always
     networks:
       metro-network:
-        ipv4_address: 172.28.0.3
+        ipv4_address: 172.29.0.3
 
 volumes:
   mysqlcco_data:
@@ -175,4 +175,4 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.28.0.0/16
+        - subnet: 172.29.0.0/16
