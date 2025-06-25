@@ -79,6 +79,7 @@ services:
     container_name: interfaces-sso
     environment:
       SPRING_PROFILES_ACTIVE: homol
+      SERVER_PORT: 8103
     ports:
       - "8103:8103"
     restart: always
