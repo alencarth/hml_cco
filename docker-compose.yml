@@ -75,7 +75,7 @@ services:
 
 
   interfaces-sso:
-    image: uniqhub.azurecr.io/metro-interfaces-hml-cco:latest
+    image: uniqhub.azurecr.io/metro-interfaces-hml-sso:latest
     container_name: interfaces-sso
     environment:
       SPRING_PROFILES_ACTIVE: homol
