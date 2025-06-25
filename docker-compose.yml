@@ -66,7 +66,6 @@ services:
     container_name: interfaces-cco
     environment:
       SPRING_PROFILES_ACTIVE: homol-cco
-      SPRING_DATA_MONGODB_URI: mongodb://brt:%21%40Cittamobi123@host.docker.internal:27018/brt
     ports:
       - "8102:8102"
     restart: always
@@ -80,7 +79,6 @@ services:
     container_name: interfaces-sso
     environment:
       SPRING_PROFILES_ACTIVE: homol
-      SPRING_DATA_MONGODB_URI: mongodb://brt:%21%40Cittamobi123@host.docker.internal:27018/brt
     ports:
       - "8103:8103"
     restart: always
