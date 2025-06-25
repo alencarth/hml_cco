@@ -88,7 +88,9 @@ services:
     image: uniqhub.azurecr.io/metro-operation-hml-cco:latest
     container_name: frontend-cco
     environment:
-          API_URL: http://interfaces-cco:8102
+          API_URL: http://interfaces-cco:8100
+    ports: 
+      - "4200:8200"
     restart: always
     networks:
       metro-network:
