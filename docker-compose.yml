@@ -1,6 +1,19 @@
 version: '3.9'
 
 services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: always
+    networks:
+      metro-network:
+        ipv4_address: 172.29.0.2
+        
   rabbitmq:
     container_name: rabbitmq-cco
     image: rabbitmq:3-management
