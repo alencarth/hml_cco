@@ -68,7 +68,6 @@ services:
       SPRING_PROFILES_ACTIVE: homol-cco
     ports:
       - "8102:8102"
-    restart: always
     networks:
       metro-network:
         ipv4_address: 172.29.0.15
@@ -82,7 +81,6 @@ services:
       SERVER_PORT: 8103
     ports:
       - "8103:8103"
-    restart: always
     networks:
       metro-network:
         ipv4_address: 172.29.0.14
