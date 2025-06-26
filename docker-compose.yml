@@ -14,7 +14,7 @@ services:
       RABBITMQ_DEFAULT_PASS: '!@UniqHub123'
     restart: always
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.7
     
   rabbitmqcore:
@@ -30,7 +30,7 @@ services:
       RABBITMQ_DEFAULT_PASS: '!@Cittamobi123'
     restart: always
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.5
 
   mysqlcco:
@@ -46,7 +46,7 @@ services:
       - "3306:3306"
     restart: always
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.9
         
   core:
@@ -58,7 +58,7 @@ services:
     ports:
       - "8102:8102"
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.16
 
   interfaces-cco:
@@ -69,7 +69,7 @@ services:
     ports: 
       - "8100:8100"
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.15
 
 
@@ -82,7 +82,7 @@ services:
     ports: 
       - "8101:8101"
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.14
 
   frontend-cco:
@@ -92,7 +92,7 @@ services:
       - "4200:8200"
     restart: always
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.13
 
   frontend-sso:
@@ -102,7 +102,7 @@ services:
       - "4201:8200"
     restart: always
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.12
 
   redis:
@@ -116,7 +116,7 @@ services:
       - ./init-scripts/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
     restart: always
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.10
         
   mongodbcco:
@@ -133,7 +133,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 'UniqHub123'
     restart: always
     networks:
-      metro-network:
+      hml_cco_metro-network:
         ipv4_address: 172.29.0.3
 
 volumes:
@@ -146,5 +146,5 @@ volumes:
   mongodbcco_data:
 
 networks:
-  metro-network:
+  hml_cco_metro-network:
     external: true
