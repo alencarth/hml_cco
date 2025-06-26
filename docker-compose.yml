@@ -78,7 +78,6 @@ services:
     container_name: interfaces-sso
     environment:
       SPRING_PROFILES_ACTIVE: homol
-      SERVER_PORT: 8103
     ports: 
       - "8101:8101"
     networks:
