@@ -147,7 +147,4 @@ volumes:
 
 networks:
   metro-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.29.0.0/16
+    external: true
