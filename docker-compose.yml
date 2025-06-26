@@ -1,22 +1,12 @@
 version: '3.9'
 
 services:
-  portainer:
-    container_name: portainer
-    image: portainer/portainer-ce:latest
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    restart: always
-    networks:
-      metro-network:
-        ipv4_address: 172.29.0.2
-        
   rabbitmq:
     container_name: rabbitmq-cco
     image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - rabbit_data_cco:/var/lib/rabbitmq
     environment:
@@ -30,6 +20,9 @@ services:
   rabbitmqcore:
     container_name: rabbitmqCORE
     image: rabbitmq:3-management
+    ports:
+      - "5673:5672"
+      - "15673:15672"
     volumes:
       - rabbit_data_core:/var/lib/rabbitmq
     environment:
@@ -49,6 +42,8 @@ services:
     volumes:
       - mysqlcco_data:/var/lib/mysql
       - ./init-scripts/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
     restart: always
     networks:
       metro-network:
@@ -60,6 +55,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
     restart: on-failure
+    ports:
+      - "8102:8102"
     networks:
       metro-network:
         ipv4_address: 172.29.0.16
@@ -69,6 +66,8 @@ services:
     container_name: interfaces-cco
     environment:
       SPRING_PROFILES_ACTIVE: homol-cco
+    ports: 
+      - "8100:8100"
     networks:
       metro-network:
         ipv4_address: 172.29.0.15
@@ -80,6 +79,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: homol
       SERVER_PORT: 8103
+    ports: 
+      - "8101:8101"
     networks:
       metro-network:
         ipv4_address: 172.29.0.14
@@ -87,8 +88,6 @@ services:
   frontend-cco:
     image: uniqhub.azurecr.io/metro-operation-hml-cco:latest
     container_name: frontend-cco
-    environment:
-          API_URL: http://interfaces-cco:8100
     ports: 
       - "4200:8200"
     restart: always
@@ -99,8 +98,8 @@ services:
   frontend-sso:
     image: uniqhub.azurecr.io/metro-operation-hml-sso:latest
     container_name: frontend-sso
-    environment:
-          API_URL: http://interfaces-sso:8103
+    ports: 
+      - "4201:8200"
     restart: always
     networks:
       metro-network:
@@ -109,6 +108,8 @@ services:
   redis:
     container_name: redis-cco
     image: redis:latest
+    ports:
+      - "6379:6379"
     command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
     volumes:
       - redis_data:/data
@@ -121,6 +122,8 @@ services:
   mongodbcco:
     container_name: mongodbcco
     image: mongo:latest
+    ports:
+      - "27017:27017"
     volumes:
       - mongodbcco_config_data:/data/configdb
       - mongodbcco_data:/data/db
